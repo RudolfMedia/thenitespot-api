@@ -6,7 +6,7 @@ class Spot < ActiveRecord::Base
 
   #friendly_id :slug_candidates, use: :slugged
 
-  #belongs_to :neighborhood, counter_cache: true 
+  belongs_to :neighborhood, counter_cache: true 
   #has_many :events, dependent: :destroy 
   #has_many :spot_features, dependent: :destroy 
   #has_many :features, through: :spot_features
@@ -59,8 +59,7 @@ class Spot < ActiveRecord::Base
   scope :eat,   ->{ where eat: true }
   scope :drink, ->{ where drink: true }
   scope :attend,->{ where attend: true }
-
-  #scope :ngh,   ->(ids){ where neighborhood_id: ids }
+  scope :neighborhoods, ->(ids){ where neighborhood_id: ids }
 
   def address
   	return unless street && city && state 

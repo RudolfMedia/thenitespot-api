@@ -11,11 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528020257) do
+ActiveRecord::Schema.define(version: 20150528024726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "neighborhoods", force: :cascade do |t|
+    t.string   "name"
+    t.string   "label"
+    t.string   "state"
+    t.float    "longitude"
+    t.float    "latitude"
+    t.integer  "spots_count", default: 0
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
 
   create_table "spots", force: :cascade do |t|
     t.string   "name",            default: "", null: false
@@ -40,6 +51,7 @@ ActiveRecord::Schema.define(version: 20150528020257) do
     t.string   "twitter_url"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.integer  "neighborhood_id"
   end
 
   add_index "spots", ["attend"], name: "index_spots_on_attend", using: :btree
@@ -47,6 +59,8 @@ ActiveRecord::Schema.define(version: 20150528020257) do
   add_index "spots", ["eat"], name: "index_spots_on_eat", using: :btree
   add_index "spots", ["latitude"], name: "index_spots_on_latitude", using: :btree
   add_index "spots", ["longitude"], name: "index_spots_on_longitude", using: :btree
+  add_index "spots", ["neighborhood_id"], name: "index_spots_on_neighborhood_id", using: :btree
   add_index "spots", ["slug"], name: "index_spots_on_slug", unique: true, using: :btree
 
+  add_foreign_key "spots", "neighborhoods"
 end
