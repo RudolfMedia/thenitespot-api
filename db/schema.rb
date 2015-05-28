@@ -11,11 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528030145) do
+ActiveRecord::Schema.define(version: 20150528033123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "sort"
+    t.integer  "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categorizations", force: :cascade do |t|
+    t.integer  "category_id"
+    t.integer  "categorizable_id"
+    t.string   "categorizable_type"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "categorizations", ["categorizable_id"], name: "index_categorizations_on_categorizable_id", using: :btree
+  add_index "categorizations", ["categorizable_type"], name: "index_categorizations_on_categorizable_type", using: :btree
+  add_index "categorizations", ["category_id"], name: "index_categorizations_on_category_id", using: :btree
 
   create_table "features", force: :cascade do |t|
     t.string   "name"
@@ -78,6 +98,7 @@ ActiveRecord::Schema.define(version: 20150528030145) do
   add_index "spots", ["neighborhood_id"], name: "index_spots_on_neighborhood_id", using: :btree
   add_index "spots", ["slug"], name: "index_spots_on_slug", unique: true, using: :btree
 
+  add_foreign_key "categorizations", "categories"
   add_foreign_key "spot_features", "features"
   add_foreign_key "spot_features", "spots"
   add_foreign_key "spots", "neighborhoods"

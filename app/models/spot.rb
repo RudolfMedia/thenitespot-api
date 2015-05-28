@@ -1,5 +1,5 @@
 class Spot < ActiveRecord::Base
-  #include Categorizable 
+  include Categorizable 
   #include UserRoleable
   #include Imageable
   #extend FriendlyId
@@ -46,9 +46,9 @@ class Spot < ActiveRecord::Base
   
   validate :valid_payment_options?, if: ->(s){ s.payment_opts.present? }
   
-  # validates_each :categorizations do |spot, attr, value|
-  #   spot.errors.add attr, "6 category max." unless spot.categorizations.size <= 6
-  # end
+  validates_each :categorizations do |spot, attr, value|
+    spot.errors.add attr, "6 category max." unless spot.categorizations.size <= 6
+  end
 
   #scope :associations, ->{ includes(:specials,:hours,:categories,:features) }
 
