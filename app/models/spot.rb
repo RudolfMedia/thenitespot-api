@@ -6,10 +6,10 @@ class Spot < ActiveRecord::Base
 
   #friendly_id :slug_candidates, use: :slugged
 
-  belongs_to :neighborhood, counter_cache: true 
+  belongs_to :neighborhood, counter_cache: true
+  has_many :spot_features, dependent: :destroy 
+  has_many :features, through: :spot_features 
   #has_many :events, dependent: :destroy 
-  #has_many :spot_features, dependent: :destroy 
-  #has_many :features, through: :spot_features
   #has_many :hours, dependent: :destroy 
   #has_many :specials, dependent: :destroy
   #has_many :menus, dependent: :destroy  
