@@ -75,7 +75,7 @@ class Spot < ActiveRecord::Base
   end
 
   def address_changed?
-  	street_changed? || city_changed? || state_changed? #|| zip_changed? 
+  	street_changed? || city_changed? || state_changed?
   end
 
   # def normalize_friendly_id(string)

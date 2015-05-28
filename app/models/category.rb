@@ -6,14 +6,13 @@ class Category < ActiveRecord::Base
   has_many :categorizations, dependent: :destroy
   has_many :spots,  through: :categorizations, source: :categorizable, source_type: 'Spot'   
   #has_many :events, through: :categorizations, source: :categorizable, source_type: 'Event'
- 
-  scope :main, ->{ where(parent_id: nil) }
-  scope :sub,  ->{ where.not(parent_id: nil) }
   
   validates :name, presence: true, uniqueness: true  
-  
-  default_scope ->{ includes(:subcategories) }
 
+  default_scope ->{ includes(:subcategories) }
+  scope :main, ->{ where(parent_id: nil) }
+  scope :sub,  ->{ where.not(parent_id: nil) }
+ 
   def to_s
     name.titleize 
   end
