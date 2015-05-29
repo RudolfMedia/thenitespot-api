@@ -9,5 +9,6 @@ class SpotSerializer < ActiveModel::Serializer
   has_many :hours 
   has_many :features
   has_many :categories 
-  has_many :specials 
+  has_many :specials
+  has_many :menus 
 end

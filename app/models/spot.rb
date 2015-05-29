@@ -10,10 +10,11 @@ class Spot < ActiveRecord::Base
   has_many :spot_features, dependent: :destroy 
   has_many :features, through: :spot_features
   has_many :specials, dependent: :destroy
-  has_many :hours, dependent: :destroy  
+  has_many :hours, dependent: :destroy 
+  has_many :menus, dependent: :destroy   
   #has_many :events, dependent: :destroy 
 
-  #has_many :menus, dependent: :destroy  
+
   #has_many :favorites, dependent: :destroy 
   #has_many :favorite_users, through: :favorites, source: :user 
   #has_many :checkins, dependent: :destroy

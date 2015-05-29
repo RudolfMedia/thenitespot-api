@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150529015422) do
+ActiveRecord::Schema.define(version: 20150529032928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,29 @@ ActiveRecord::Schema.define(version: 20150529015422) do
   end
 
   add_index "hours", ["spot_id"], name: "index_hours_on_spot_id", using: :btree
+
+  create_table "menu_items", force: :cascade do |t|
+    t.integer  "menu_id"
+    t.string   "name"
+    t.string   "description"
+    t.float    "price"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "menu_items", ["menu_id"], name: "index_menu_items_on_menu_id", using: :btree
+
+  create_table "menus", force: :cascade do |t|
+    t.integer  "spot_id"
+    t.integer  "sort"
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "menus", ["sort"], name: "index_menus_on_sort", using: :btree
+  add_index "menus", ["spot_id"], name: "index_menus_on_spot_id", using: :btree
 
   create_table "neighborhoods", force: :cascade do |t|
     t.string   "name"
@@ -127,6 +150,8 @@ ActiveRecord::Schema.define(version: 20150529015422) do
 
   add_foreign_key "categorizations", "categories"
   add_foreign_key "hours", "spots"
+  add_foreign_key "menu_items", "menus"
+  add_foreign_key "menus", "spots"
   add_foreign_key "specials", "spots"
   add_foreign_key "spot_features", "features"
   add_foreign_key "spot_features", "spots"
