@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528033123) do
+ActiveRecord::Schema.define(version: 20150529011709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,21 @@ ActiveRecord::Schema.define(version: 20150528033123) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
+
+  create_table "specials", force: :cascade do |t|
+    t.integer  "spot_id"
+    t.string   "name"
+    t.integer  "sort"
+    t.string   "description"
+    t.string   "days",        default: [],              array: true
+    t.time     "start_time"
+    t.time     "end_time"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "specials", ["sort"], name: "index_specials_on_sort", using: :btree
+  add_index "specials", ["spot_id"], name: "index_specials_on_spot_id", using: :btree
 
   create_table "spot_features", force: :cascade do |t|
     t.integer  "spot_id"
@@ -99,6 +114,7 @@ ActiveRecord::Schema.define(version: 20150528033123) do
   add_index "spots", ["slug"], name: "index_spots_on_slug", unique: true, using: :btree
 
   add_foreign_key "categorizations", "categories"
+  add_foreign_key "specials", "spots"
   add_foreign_key "spot_features", "features"
   add_foreign_key "spot_features", "spots"
   add_foreign_key "spots", "neighborhoods"
