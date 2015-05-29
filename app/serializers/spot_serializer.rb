@@ -6,6 +6,7 @@ class SpotSerializer < ActiveModel::Serializer
              :facebook_url, :twitter_url
 
   has_one :neighborhood
+  has_many :hours 
   has_many :features
   has_many :categories 
   has_many :specials 
