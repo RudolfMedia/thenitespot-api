@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150529032928) do
+ActiveRecord::Schema.define(version: 20150601222810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,27 @@ ActiveRecord::Schema.define(version: 20150529032928) do
   add_index "categorizations", ["categorizable_id"], name: "index_categorizations_on_categorizable_id", using: :btree
   add_index "categorizations", ["categorizable_type"], name: "index_categorizations_on_categorizable_type", using: :btree
   add_index "categorizations", ["category_id"], name: "index_categorizations_on_category_id", using: :btree
+
+  create_table "events", force: :cascade do |t|
+    t.integer  "spot_id"
+    t.string   "name"
+    t.string   "slug"
+    t.text     "about"
+    t.string   "age"
+    t.string   "entry"
+    t.string   "entry_fee"
+    t.string   "phone"
+    t.string   "email"
+    t.string   "ticket_url"
+    t.string   "website_url"
+    t.string   "facebook_url"
+    t.string   "twitter_url"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "events", ["slug"], name: "index_events_on_slug", using: :btree
+  add_index "events", ["spot_id"], name: "index_events_on_spot_id", using: :btree
 
   create_table "features", force: :cascade do |t|
     t.string   "name"
@@ -88,6 +109,21 @@ ActiveRecord::Schema.define(version: 20150529032928) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
+
+  create_table "occurrences", force: :cascade do |t|
+    t.integer  "event_id"
+    t.date     "start_date",      null: false
+    t.time     "start_time"
+    t.date     "end_date"
+    t.time     "end_time"
+    t.date     "expiration_date", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "occurrences", ["event_id"], name: "index_occurrences_on_event_id", using: :btree
+  add_index "occurrences", ["expiration_date"], name: "index_occurrences_on_expiration_date", using: :btree
+  add_index "occurrences", ["start_date"], name: "index_occurrences_on_start_date", using: :btree
 
   create_table "specials", force: :cascade do |t|
     t.integer  "spot_id"
@@ -149,9 +185,11 @@ ActiveRecord::Schema.define(version: 20150529032928) do
   add_index "spots", ["slug"], name: "index_spots_on_slug", unique: true, using: :btree
 
   add_foreign_key "categorizations", "categories"
+  add_foreign_key "events", "spots"
   add_foreign_key "hours", "spots"
   add_foreign_key "menu_items", "menus"
   add_foreign_key "menus", "spots"
+  add_foreign_key "occurrences", "events"
   add_foreign_key "specials", "spots"
   add_foreign_key "spot_features", "features"
   add_foreign_key "spot_features", "spots"

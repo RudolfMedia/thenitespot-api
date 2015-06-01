@@ -11,8 +11,10 @@ class Spot < ActiveRecord::Base
   has_many :features, through: :spot_features
   has_many :specials, dependent: :destroy
   has_many :hours, dependent: :destroy 
-  has_many :menus, dependent: :destroy   
-  #has_many :events, dependent: :destroy 
+  has_many :menus, dependent: :destroy
+     
+  has_many :events, dependent: :destroy
+  validates_length_of :events, maximum: 20, message: 'A Nitespot may have up to 20 events at a time' 
 
 
   #has_many :favorites, dependent: :destroy 
@@ -48,10 +50,6 @@ class Spot < ActiveRecord::Base
   
   validate :valid_payment_options?, if: ->(s){ s.payment_opts.present? }
   
-  validates_each :categorizations do |spot, attr, value|
-    spot.errors.add attr, "6 category max." unless spot.categorizations.size <= 6
-  end
-
   #scope :associations, ->{ includes(:specials,:hours,:categories,:features) }
 
   # def primary_image
