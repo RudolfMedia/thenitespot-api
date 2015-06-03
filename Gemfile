@@ -18,3 +18,7 @@ gem 'devise'
 gem 'devise_token_auth'
 gem 'omniauth'
 gem 'omniauth-facebook'
+
+#Images
+gem 'carrierwave'
+gem 'mini_magick'

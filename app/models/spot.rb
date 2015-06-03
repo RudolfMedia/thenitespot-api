@@ -1,7 +1,7 @@
 class Spot < ActiveRecord::Base
   include Categorizable 
   include UserRoleable
-  #include Imageable
+  include Imageable
   #extend FriendlyId
 
   #friendly_id :slug_candidates, use: :slugged

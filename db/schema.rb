@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150603015552) do
+ActiveRecord::Schema.define(version: 20150603030434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,6 +96,17 @@ ActiveRecord::Schema.define(version: 20150603015552) do
   end
 
   add_index "hours", ["spot_id"], name: "index_hours_on_spot_id", using: :btree
+
+  create_table "images", force: :cascade do |t|
+    t.integer  "imageable_id"
+    t.string   "imageable_type"
+    t.string   "file"
+    t.boolean  "primary"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "images", ["imageable_type", "imageable_id"], name: "index_images_on_imageable_type_and_imageable_id", using: :btree
 
   create_table "menu_items", force: :cascade do |t|
     t.integer  "menu_id"
