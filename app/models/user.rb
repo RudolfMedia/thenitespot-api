@@ -3,7 +3,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, :omniauth_providers => [ :facebook ]
   include DeviseTokenAuth::Concerns::User
-  
+  mount_uploader :avatar, AvatarUploader
+
   has_many :user_roles, dependent: :restrict_with_error
   has_many :spots, through: :user_roles, source: :resource, source_type: 'Spot' 
   has_many :events, through: :spots 
@@ -31,7 +32,7 @@ class User < ActiveRecord::Base
     user_roles.exists? resource: resource 
   end
 
-private 
+ private 
 
   def is_atleast_18
     unless !dob.is_a?(Date) || dob.to_date < 18.years.ago.to_date  
