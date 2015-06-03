@@ -10,7 +10,7 @@ class Event < ActiveRecord::Base
   accepts_nested_attributes_for :occurrences, reject_if: :all_blank, allow_destroy: true
   validates_length_of :occurrences, maximum: 5, message: 'An event may have up to 5 seperate occurrences.'
 
-  # has_many :reports, as: :reportable, dependent: :destroy 
+  has_many :reports, as: :reportable, dependent: :destroy 
 
   validates_presence_of :spot_id, :age, :entry, :occurrences
   validates :name, length: { in:  (3..45) }, unreserved_name: true 

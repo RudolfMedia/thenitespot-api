@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150603003113) do
+ActiveRecord::Schema.define(version: 20150603011331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,6 +146,18 @@ ActiveRecord::Schema.define(version: 20150603003113) do
   add_index "occurrences", ["expiration_date"], name: "index_occurrences_on_expiration_date", using: :btree
   add_index "occurrences", ["start_date"], name: "index_occurrences_on_start_date", using: :btree
 
+  create_table "reports", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "reportable_id"
+    t.string   "reportable_type"
+    t.integer  "issue"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "reports", ["reportable_type", "reportable_id"], name: "index_reports_on_reportable_type_and_reportable_id", using: :btree
+  add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
+
   create_table "specials", force: :cascade do |t|
     t.integer  "spot_id"
     t.string   "name"
@@ -241,6 +253,7 @@ ActiveRecord::Schema.define(version: 20150603003113) do
   add_foreign_key "menu_items", "menus"
   add_foreign_key "menus", "spots"
   add_foreign_key "occurrences", "events"
+  add_foreign_key "reports", "users"
   add_foreign_key "specials", "spots"
   add_foreign_key "spot_features", "features"
   add_foreign_key "spot_features", "spots"
