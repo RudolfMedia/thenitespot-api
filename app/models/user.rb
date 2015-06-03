@@ -4,6 +4,10 @@ class User < ActiveRecord::Base
          :omniauthable, :omniauth_providers => [ :facebook ]
   include DeviseTokenAuth::Concerns::User
   
+  has_many :user_roles, dependent: :restrict_with_error
+  has_many :spots, through: :user_roles, source: :resource, source_type: 'Spot' 
+  has_many :events, through: :spots 
+
   has_many :favorites, dependent: :destroy
   has_many :favorite_spots, through: :favorites, source: :spot
 
@@ -17,6 +21,14 @@ class User < ActiveRecord::Base
   def age
     now = Date.today
     now.year - dob.year - ((now.month > dob.month || (now.month == dob.month && now.day >= dob.day)) ? 0 : 1)
+  end
+
+  def is_admin_of?(resource)
+    user_roles.admins.exists? resource: resource 
+  end 
+
+  def can_update?(resource)
+    user_roles.exists? resource: resource 
   end
 
 private 

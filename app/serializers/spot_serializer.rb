@@ -13,6 +13,10 @@ class SpotSerializer < ActiveModel::Serializer
   has_many :menus
   has_many :events
 
+  #has_many :admin_users
+  #has_many :editor_users
+  #has_many :reports   
   #has_many :favorite_users
-  #has_many :checkins  
+  #has_many :checkins
+
 end

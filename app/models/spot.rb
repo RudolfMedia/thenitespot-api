@@ -1,6 +1,6 @@
 class Spot < ActiveRecord::Base
   include Categorizable 
-  #include UserRoleable
+  include UserRoleable
   #include Imageable
   #extend FriendlyId
 
