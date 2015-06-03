@@ -9,9 +9,15 @@ class Spot < ActiveRecord::Base
   belongs_to :neighborhood, counter_cache: true
   has_many :spot_features, dependent: :destroy 
   has_many :features, through: :spot_features
+
   has_many :specials, dependent: :destroy
-  has_many :hours, dependent: :destroy 
+  validates_length_of :specials, maximum: 42, message: 'A Nitespot may have up to 42 specials'
+
+  has_many :hours, dependent: :destroy
+  validates_length_of :hours, maximum: 14, message: 'A Nitespot may have up to 14 sets of hours'
+
   has_many :menus, dependent: :destroy
+  validates_length_of :menus, maximum: 6, message: 'A Nitespot may have up to 6 menus'
      
   has_many :events, dependent: :destroy
   validates_length_of :events, maximum: 20, message: 'A Nitespot may have up to 20 events at a time' 

@@ -1,6 +1,7 @@
 class Menu < ActiveRecord::Base
   include Sortable 
   belongs_to :spot
+  validates_associated :spot 
   
   has_many :items, class_name: 'MenuItem', dependent: :destroy 
   accepts_nested_attributes_for :items, reject_if: :all_blank, allow_destroy: true 
