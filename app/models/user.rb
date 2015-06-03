@@ -4,6 +4,9 @@ class User < ActiveRecord::Base
          :omniauthable, :omniauth_providers => [ :facebook ]
   include DeviseTokenAuth::Concerns::User
   
+  has_many :favorites, dependent: :destroy
+  has_many :favorite_spots, through: :favorites, source: :spot 
+
   validates_presence_of :name, :gender, :location, :dob 
   validates :gender, inclusion: { in: %w( male female ) }
   validate  :is_atleast_18

@@ -16,9 +16,9 @@ class Spot < ActiveRecord::Base
   has_many :events, dependent: :destroy
   validates_length_of :events, maximum: 20, message: 'A Nitespot may have up to 20 events at a time' 
 
-
-  #has_many :favorites, dependent: :destroy 
-  #has_many :favorite_users, through: :favorites, source: :user 
+  has_many :favorites, dependent: :destroy 
+  has_many :favorite_users, through: :favorites, source: :user
+   
   #has_many :checkins, dependent: :destroy
   #has_many :reports, as: :reportable, dependent: :destroy 
   

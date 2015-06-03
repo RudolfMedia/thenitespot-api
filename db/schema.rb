@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150602040930) do
+ActiveRecord::Schema.define(version: 20150603000458) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,16 @@ ActiveRecord::Schema.define(version: 20150602040930) do
 
   add_index "events", ["slug"], name: "index_events_on_slug", using: :btree
   add_index "events", ["spot_id"], name: "index_events_on_spot_id", using: :btree
+
+  create_table "favorites", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "spot_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "favorites", ["spot_id"], name: "index_favorites_on_spot_id", using: :btree
+  add_index "favorites", ["user_id"], name: "index_favorites_on_user_id", using: :btree
 
   create_table "features", force: :cascade do |t|
     t.string   "name"
@@ -212,6 +222,8 @@ ActiveRecord::Schema.define(version: 20150602040930) do
 
   add_foreign_key "categorizations", "categories"
   add_foreign_key "events", "spots"
+  add_foreign_key "favorites", "spots"
+  add_foreign_key "favorites", "users"
   add_foreign_key "hours", "spots"
   add_foreign_key "menu_items", "menus"
   add_foreign_key "menus", "spots"
