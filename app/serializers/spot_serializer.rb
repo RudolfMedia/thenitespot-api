@@ -11,5 +11,8 @@ class SpotSerializer < ActiveModel::Serializer
   has_many :categories 
   has_many :specials
   has_many :menus
-  has_many :events  
+  has_many :events
+
+  #has_many :favorite_users
+  #has_many :checkins  
 end

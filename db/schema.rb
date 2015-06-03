@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150603000458) do
+ActiveRecord::Schema.define(version: 20150603003113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,17 @@ ActiveRecord::Schema.define(version: 20150603000458) do
   add_index "categorizations", ["categorizable_id"], name: "index_categorizations_on_categorizable_id", using: :btree
   add_index "categorizations", ["categorizable_type"], name: "index_categorizations_on_categorizable_type", using: :btree
   add_index "categorizations", ["category_id"], name: "index_categorizations_on_category_id", using: :btree
+
+  create_table "checkins", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "spot_id"
+    t.integer  "count",      default: 0
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "checkins", ["spot_id"], name: "index_checkins_on_spot_id", using: :btree
+  add_index "checkins", ["user_id"], name: "index_checkins_on_user_id", using: :btree
 
   create_table "events", force: :cascade do |t|
     t.integer  "spot_id"
@@ -221,6 +232,8 @@ ActiveRecord::Schema.define(version: 20150603000458) do
   add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
 
   add_foreign_key "categorizations", "categories"
+  add_foreign_key "checkins", "spots"
+  add_foreign_key "checkins", "users"
   add_foreign_key "events", "spots"
   add_foreign_key "favorites", "spots"
   add_foreign_key "favorites", "users"

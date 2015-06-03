@@ -5,7 +5,9 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
   
   has_many :favorites, dependent: :destroy
-  has_many :favorite_spots, through: :favorites, source: :spot 
+  has_many :favorite_spots, through: :favorites, source: :spot
+
+  has_many :checkins, dependent: :destroy  
 
   validates_presence_of :name, :gender, :location, :dob 
   validates :gender, inclusion: { in: %w( male female ) }
