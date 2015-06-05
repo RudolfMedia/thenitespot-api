@@ -6,7 +6,11 @@ Rails.application.routes.draw do
     scope module: :v1, constraints: ApiVersion.new(version: 1, default: true) do 
       
       get 'features/index',   to: 'features#index'
+      
       get 'categories/index', to: 'categories#index'
+
+      get 'neighborhoods/index', to: 'neighborhoods#index'
+      get 'neighborhoods/near',  to: 'neighborhoods#near'
 
     end
   end
