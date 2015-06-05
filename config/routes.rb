@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       get 'neighborhoods/index', to: 'neighborhoods#index'
       get 'neighborhoods/near',  to: 'neighborhoods#near'
 
+      resources :favorites, only: [:create, :destroy]
+      
     end
   end
 end
