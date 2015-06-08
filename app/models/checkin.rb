@@ -14,13 +14,9 @@ class Checkin < ActiveRecord::Base
 
 private
 
-  def user_position
-   return unless ll 
-   ll.split(',')
-  end
 
   def user_close_enough?
-   unless Geocoder::Calculations.distance_between(spot.to_coordinates, user_position) < 0.310
+   unless Geocoder::Calculations.distance_between(spot.to_coordinates, ll) < 0.310
     errors.add(:base, 'Unable to checkin at this location')
    end
   end

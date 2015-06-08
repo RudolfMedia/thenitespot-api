@@ -6,9 +6,9 @@ module API
       def create
        favorite = current_user.favorites.new(favorite_params)
        if favorite.save
-       	render json: { success: 'Favorite added!' }, status: 201
+        render json: { success: 'Favorite added!' }, status: 201
        else
-       	render json: { errors: favorite.errors }, status: 422 
+        render json: { errors: favorite.errors }, status: 422 
        end
       end
 
