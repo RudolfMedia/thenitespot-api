@@ -18,6 +18,7 @@ gem 'devise'
 gem 'devise_token_auth'
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'pundit'
 
 #Images
 gem 'carrierwave'
