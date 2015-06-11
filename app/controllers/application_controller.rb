@@ -11,6 +11,10 @@ protected
     %w(eat drink attend).include? params[:sort]  	
   end
 
+  def radius
+    params[:r] || 3
+  end
+
   def ll_params
     params.require(:ll).split(',')
   end

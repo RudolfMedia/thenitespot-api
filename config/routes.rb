@@ -16,10 +16,14 @@ Rails.application.routes.draw do
       get 'neighborhoods/index', to: 'neighborhoods#index'
       get 'neighborhoods/near',  to: 'neighborhoods#near'
 
+      resources :spots do 
+        get 'near', on: :collection 
+      end
+
       resources :favorites, only: [:create, :destroy]
       
       post 'checkins', to: 'checkins#create'
-      
+
     end
   end
 end
