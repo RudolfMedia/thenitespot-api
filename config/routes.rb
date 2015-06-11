@@ -17,7 +17,8 @@ Rails.application.routes.draw do
       get 'neighborhoods/near',  to: 'neighborhoods#near'
 
       resources :spots do 
-        get 'near', on: :collection 
+        get 'near', on: :collection
+        resources :specials, only: [ :create, :update, :destroy ] 
       end
 
       resources :favorites, only: [:create, :destroy]
