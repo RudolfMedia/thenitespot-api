@@ -10,4 +10,5 @@ class Menu < ActiveRecord::Base
   validates_presence_of :spot_id 
   validates :name, length: { maximum: 50 }
   validates :description, length: { maximum: 250 }, allow_blank: true 
+
 end
