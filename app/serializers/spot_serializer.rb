@@ -19,5 +19,6 @@ class SpotSerializer < ActiveModel::Serializer
   #has_many :reports   
   #has_many :favorite_users
   #has_many :checkins
+  #has_many :reports*
 
 end

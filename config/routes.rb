@@ -26,7 +26,8 @@ Rails.application.routes.draw do
       resources :favorites, only: [:create, :destroy]
       
       post 'checkins', to: 'checkins#create'
-
+      post 'reports',  to: 'reports#create'
+      
     end
   end
 end

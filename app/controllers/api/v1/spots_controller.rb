@@ -21,7 +21,7 @@ module API
       end
 
       def new
-      	spot = Spot.new 
+      	spot = Spot.new()
       end
 
       def create
@@ -71,11 +71,11 @@ module API
           :eat, :drink, :attend,
           :street, :city, :state,
           :neighborhood_id, 
-		  :phone, :email, :about, :price, 
-		  :website_url, :reservation_url, :menu_url, :facebook_url, :twitter_url, 
-		  :payment_opts =>[], 
-		  :feature_ids => [], 
-		  :category_ids => []
+		      :phone, :email, :about, :price, 
+		      :website_url, :reservation_url, :menu_url, :facebook_url, :twitter_url, 
+		      :payment_opts =>[], 
+		      :feature_ids => [], 
+		      :category_ids => []
         ]
       end 
 
