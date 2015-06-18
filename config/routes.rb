@@ -16,13 +16,16 @@ Rails.application.routes.draw do
       get 'neighborhoods/index', to: 'neighborhoods#index'
       get 'neighborhoods/near',  to: 'neighborhoods#near'
 
+      get 'events/near', to: 'events#near'
+
       resources :spots do 
         get 'near', on: :collection
         resources :specials, only: [ :create, :update, :destroy ]
         resources :hours,    only: [ :create, :update, :destroy ]
         resources :menus,    only: [ :index , :create, :update, :destroy ], shallow: true 
+        resources :events, shallow: true 
       end
-
+      
       resources :favorites, only: [:create, :destroy]
       
       post 'checkins', to: 'checkins#create'

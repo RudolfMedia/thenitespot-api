@@ -7,6 +7,7 @@ class SpotSerializer < ActiveModel::Serializer
 
   has_one :primary_image 
   has_one :neighborhood
+  has_many :images 
   has_many :hours 
   has_many :features
   has_many :categories 

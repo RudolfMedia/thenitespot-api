@@ -81,7 +81,7 @@ module API
 
       def image_params
         { :primary_image_attributes => [ :id, :file, :_destroy ], :images_attributes => [ :id, :file, :_destroy ] }
-	  end 
+	    end 
 
     end
   end

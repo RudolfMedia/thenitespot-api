@@ -36,8 +36,9 @@ class Event < ActiveRecord::Base
     end
   end
   
+  scope :venue,    ->(id){ where(spot_id: id) }
   scope :upcoming, ->{ joins(:occurrences).merge(Occurrence.upcoming) }
-
+  
   # def normalize_friendly_id(string)
   #   super(string.gsub("'", ""))
   # end
