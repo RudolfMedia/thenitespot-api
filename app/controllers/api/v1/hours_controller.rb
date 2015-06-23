@@ -6,7 +6,7 @@ module API
       def create
         spot = Spot.find(params[:spot_id])
         hour = spot.hours.new(hour_params)
-        #authorize hour
+        authorize hour
         if hour.save
           render json: { success: 'Hours added!'}, status: 201
         else
@@ -17,7 +17,7 @@ module API
       def update
         spot = Spot.find(params[:spot_id])
         hour = spot.hours.find(params[:id])
-        #authorize hour
+        authorize hour
         if hour.update(hour_params)
           render json: { success: 'Hours updated.'}, status: 201
         else
@@ -28,7 +28,7 @@ module API
       def destroy
       	spot = Spot.find(params[:spot_id])
         hour = spot.hours.find(params[:id])
-        #authorize hour
+        authorize hour
         hour.destroy
         render json: { success: 'Hours removed.' }, status: 200
       end

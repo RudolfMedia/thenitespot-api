@@ -23,7 +23,7 @@ module API
       def create
         spot = Spot.find(params[:spot_id])
         menu = spot.menus.new(menu_params)
-        #authorize menu.spot
+        authorize menu
         if menu.save
           render json: { success: 'Menu added!'}, status: 201
         else
@@ -39,7 +39,7 @@ module API
 
       def update
         menu = Menus.find(params[:id])
-        #authorize menu.spot
+        authorize menu
         if menu.update(menu_params)
           render json: { success: 'Menu updated.'}, status: 201
         else
@@ -49,7 +49,7 @@ module API
 
       def destroy
         menu = Menus.find(params[:id])
-        #authorize menu.spot
+        authorize menu
         menu.destroy
         render json: { success: 'Menu removed.' }, status: 200
       end

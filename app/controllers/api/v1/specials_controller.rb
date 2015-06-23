@@ -6,7 +6,7 @@ module API
       def create
         spot = Spot.find(params[:spot_id])
         special = spot.specials.new(special_params)
-        #authorize special
+        authorize special
         if special.save
           render json: { success: 'Special added!'}, status: 201
         else
@@ -17,7 +17,7 @@ module API
       def update
         spot = Spot.find(params[:spot_id])
         special = spot.specials.find(params[:id])
-        #authorize special
+        authorize special
         if special.update(special_params)
           render json: { success: 'Special updated.'}, status: 201
         else
@@ -28,7 +28,7 @@ module API
       def destroy
       	spot = Spot.find(params[:spot_id])
         special = spot.specials.find(params[:id])
-        #authorize special
+        authorize special
         special.destroy
         render json: { success: 'Special removed.' }, status: 200
       end

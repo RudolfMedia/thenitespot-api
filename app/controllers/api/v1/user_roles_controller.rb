@@ -2,10 +2,11 @@ module API
   module V1
     class UserRolesController < ApplicationController
       before_action :authenticate_user!, :validate_role_type!
-      before_action :set_role, only: [ :update, :destroy ]
       before_action :set_roleable_object, only: [ :index, :create ]
+      before_action :set_role, only: [ :update, :destroy ]
 
       def index
+        #authorize @roleable 
         user_roles = @roleable.send("#{params[:type]}_roles")
         render json: user_roles, status: 200 
       end

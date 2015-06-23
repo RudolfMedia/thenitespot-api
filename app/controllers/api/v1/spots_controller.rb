@@ -20,9 +20,9 @@ module API
       	render json: spot, status: 200
       end
 
-      def new
-      	spot = Spot.new()
-      end
+      # def new
+      # 	spot = Spot.new()
+      # end
 
       def create
       	spot = Spot.new(spot_params)
@@ -34,15 +34,15 @@ module API
       	end
       end
 
-      def edit
-      	spot = Spot.find(params[:id])
-      	#authorize spot
-      	render json: spot, status: 200 
-      end
+      # def edit
+      # 	spot = Spot.find(params[:id])
+      # 	#authorize spot
+      # 	render json: spot, status: 200 
+      # end
 
       def update
       	spot = Spot.find(params[:id])
-      	#authorize spot
+      	authorize spot
       	spot_params.merge! image_params 
       	if spot.update(spot_params)
           render json: spot, status: 200
@@ -54,7 +54,7 @@ module API
 
       def destroy
       	spot = Spot.find(params[:id])
-      	#authorize spot
+      	authorize spot
       	spot.destroy
       	render json: { success: 'Spot removed' }, status: 200
       end

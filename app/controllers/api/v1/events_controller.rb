@@ -21,12 +21,12 @@ module API
       	render json: event, status: 200
       end
 
-      def new
-        spot = Spot.find(params[:spot_id])
-        #authorize spot 
-        event = spot.events.new()
-        render json: event, status: 200 
-      end
+      # def new
+      #   spot = Spot.find(params[:spot_id])
+      #   #authorize spot 
+      #   event = spot.events.new()
+      #   render json: event, status: 200 
+      # end
 
       def create
         spot  = Spot.find(params[:spot_id])
@@ -39,11 +39,11 @@ module API
       	end
       end
 
-      def edit
-      	event = Event.find(params[:id])
-      	#authorize event.spot 
-      	render json: event, status: 200 
-      end
+      # def edit
+      # 	event = Event.find(params[:id])
+      # 	#authorize event.spot 
+      # 	render json: event, status: 200 
+      # end
 
       def update
       	event = Event.find(params[:id])

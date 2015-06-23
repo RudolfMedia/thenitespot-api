@@ -12,4 +12,9 @@ class UserRolePolicy < ApplicationPolicy
     user.is_admin_of? record.resource || user == record.user 
   end
 
+  class Scope < Scope
+    def resolve
+      scope
+    end
+  end
 end

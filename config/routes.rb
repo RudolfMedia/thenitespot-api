@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 
       resources :events, only: [ :show, :update, :destroy ], concerns: :geolocateable
 
-      resources :spots, concerns: [ :user_roleable, :geolocateable ] do
+      resources :spots, except: [ :new, :edit ], concerns: [ :user_roleable, :geolocateable ] do
       
         with_options only: [ :create, :update, :destroy ] do
           resources :specials
