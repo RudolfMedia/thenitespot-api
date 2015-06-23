@@ -4,7 +4,6 @@ class UserRole < ActiveRecord::Base
 
   enum role: [ :admin, :editor ]
 
-  #user_id foreigin keys must exist.
   validates_presence_of :user_id 
   validates_inclusion_of :role, in: roles 
   validates_uniqueness_of :user, scope: [ :resource_type, :resource_id ], message: 'User already assigned.'

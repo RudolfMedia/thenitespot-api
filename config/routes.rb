@@ -13,31 +13,40 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :geolocateable do 
+    get :near, on: :collection 
+  end
+
   namespace :api, defaults: { format: :json }, path: '/' do # constraints: { subdomain: 'api' }
     scope module: :v1, constraints: ApiVersion.new(version: 1, default: true) do 
-      
-      get 'features/index',   to: 'features#index'
 
-      get 'categories/index', to: 'categories#index'
-
-      get 'neighborhoods/index', to: 'neighborhoods#index'
-      get 'neighborhoods/near',  to: 'neighborhoods#near'
-
-      get 'events/near', to: 'events#near'
-
-      resources :spots, concerns: :user_roleable do 
-        get 'near', on: :collection
-        resources :specials, only: [ :create, :update, :destroy ]
-        resources :hours,    only: [ :create, :update, :destroy ]
-        resources :menus,    only: [ :index , :create, :update, :destroy ], shallow: true 
-        resources :events, shallow: true 
+      with_options only: :index do 
+        resources :features
+        resources :categories
+        resources :neighborhoods, concerns: :geolocateable
       end
+
+      resources :events, only: [ :show, :update, :destroy ], concerns: :geolocateable
+
+      resources :spots, concerns: [ :user_roleable, :geolocateable ] do
       
-      resources :favorites, only: [:create, :destroy]
+        with_options only: [ :create, :update, :destroy ] do
+          resources :specials
+          resources :hours
+        end 
       
-      post 'checkins', to: 'checkins#create'
-      post 'reports',  to: 'reports#create'
+        resources :menus,    only: [ :index, :create, :update, :destroy ], shallow: true 
+        resources :events,   only: [ :index, :create ] 
       
+      end 
+      
+      resources :favorites, only: [ :create, :destroy ]
+      
+      with_options only: :create do 
+        resources :checkins
+        resources :reports 
+      end
+       
     end
   end
 end
