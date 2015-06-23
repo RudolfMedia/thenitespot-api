@@ -6,6 +6,13 @@ Rails.application.routes.draw do
       omniauth_callbacks: 'overrides/omniauth_callbacks'
     }
 
+  concern :user_roleable do 
+    with_options except: [ :show, :new, :edit ], controller: :user_roles, shallow: true do 
+      resources :admin_roles,  type: 'admin'
+      resources :editor_roles, type: 'editor'
+    end
+  end
+
   namespace :api, defaults: { format: :json }, path: '/' do # constraints: { subdomain: 'api' }
     scope module: :v1, constraints: ApiVersion.new(version: 1, default: true) do 
       
@@ -18,7 +25,7 @@ Rails.application.routes.draw do
 
       get 'events/near', to: 'events#near'
 
-      resources :spots do 
+      resources :spots, concerns: :user_roleable do 
         get 'near', on: :collection
         resources :specials, only: [ :create, :update, :destroy ]
         resources :hours,    only: [ :create, :update, :destroy ]

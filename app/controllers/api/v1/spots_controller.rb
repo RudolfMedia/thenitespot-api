@@ -10,7 +10,7 @@ module API
       end
 
       def near
-        spots = params[:ngh].present? ? Spot.ngh(params[:ngh]) : Spot.near(ll_params, radius)
+        spots = params[:ngh].present? ? Spot.neighborhoods(params[:ngh]) : Spot.near(ll_params, radius)
         spots = spots.send(params[:sort].to_sym) if valid_sort?
       	render json: spots, status: 200
       end

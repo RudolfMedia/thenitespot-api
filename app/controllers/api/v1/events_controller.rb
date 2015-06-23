@@ -10,8 +10,9 @@ module API
       end
 
       def near
-        nearby_venues = params[:ngh].present? ? Spot.ngh(params[:ngh]).attend.pluck(:id) : Spot.geolocate(ll_params, radius).attend.pluck(:id)
-      	events =  Event.venue(nearby_venues).upcoming
+        events = Event.joins(:spot)
+                      .merge( params[:ngh] ? Spot.neighborhoods(params[:ngh]) : Spot.geolocate(ll_params, radius) )
+                      .upcoming 
         render json: events, status: 200
       end
 
@@ -22,15 +23,15 @@ module API
 
       def new
         spot = Spot.find(params[:spot_id])
+        #authorize spot 
         event = spot.events.new()
-        #authorize event.spot 
         render json: event, status: 200 
       end
 
       def create
         spot  = Spot.find(params[:spot_id])
+        #authorize spot 
       	event = spot.events.new(event_params)
-      	#authorize event.spot  
       	if event.save
       	  render json: event, status: 201
       	else
@@ -83,7 +84,7 @@ module API
             :_destroy
           ],
           :primary_image_attributes => [ :id, :file, :_destroy ], 
-          :images_attributes => [ :id, :file, :_destroy ] 
+          :images_attributes        => [ :id, :file, :_destroy ] 
         ] 
       end
 
