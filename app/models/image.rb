@@ -1,5 +1,5 @@
 class Image < ActiveRecord::Base
- 
+ # require 'carrierwave/orm/activeRecord'
   mount_uploader :file, ImageUploader
   belongs_to :imageable, polymorphic: true
   
