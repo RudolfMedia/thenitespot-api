@@ -1,19 +1,12 @@
 module API
   module V1
     class EventsController < ApplicationController
-      before_action :authenticate_user!, except: [:show, :near]
+      before_action :authenticate_user!, except: [:index]
 
       def index
         spot   = Spot.find(params[:spot_id])
-      	events = spot.events 
+      	events = spot.events.includes(:primary_image,:categories) 
       	render json: events, status: 200
-      end
-
-      def near
-        events = Event.joins(:spot)
-                      .merge( params[:ngh] ? Spot.neighborhoods(params[:ngh]) : Spot.geolocate(ll_params, radius) )
-                      .upcoming 
-        render json: events, status: 200
       end
 
       def show
@@ -21,17 +14,10 @@ module API
       	render json: event, status: 200
       end
 
-      # def new
-      #   spot = Spot.find(params[:spot_id])
-      #   #authorize spot 
-      #   event = spot.events.new()
-      #   render json: event, status: 200 
-      # end
-
       def create
         spot  = Spot.find(params[:spot_id])
-        #authorize spot 
       	event = spot.events.new(event_params)
+        authorize event
       	if event.save
       	  render json: event, status: 201
       	else
@@ -39,15 +25,9 @@ module API
       	end
       end
 
-      # def edit
-      # 	event = Event.find(params[:id])
-      # 	#authorize event.spot 
-      # 	render json: event, status: 200 
-      # end
-
       def update
       	event = Event.find(params[:id])
-      	#authorize event.spot
+      	authorize event
       	if event.update(event_params)
           render json: event, status: 200
       	else
@@ -58,7 +38,7 @@ module API
 
       def destroy
       	event = Event.find(params[:id])
-      	#authorize event.spot
+      	authorize event
       	event.destroy
       	render json: { success: 'Event removed' }, status: 200
       end
@@ -66,25 +46,19 @@ module API
     private
       
       def event_params
-        params.require(:event).permit(*permitted_event_params)
+        params.permit(*permitted_event_params)
       end
 
       def permitted_event_params
         [
-          :spot_id,
           :name,
+          :start_date, :start_time, 
+          :end_date, :end_time,
           :age, :entry, :entry_fee,
 		      :phone, :email, :about,
-		      :website_url, :facebook_url, :twitter_url,
+		      :website_url, 
 		      :category_ids => [],
-          :occurrences_attributes => [ 
-            :id, 
-            :start_date, :start_time, 
-            :end_date, :end_time, 
-            :_destroy
-          ],
-          :primary_image_attributes => [ :id, :file, :_destroy ], 
-          :images_attributes        => [ :id, :file, :_destroy ] 
+          :primary_image_attributes => [ :id, :file_data_uri, :_destroy ]
         ] 
       end
 

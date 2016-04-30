@@ -6,39 +6,48 @@ Rails.application.routes.draw do
       omniauth_callbacks: 'overrides/omniauth_callbacks'
     }
 
-  concern :user_roleable do 
-    with_options except: [ :show, :new, :edit ], controller: :user_roles, shallow: true do 
-      resources :admin_roles,  type: 'admin'
-      resources :editor_roles, type: 'editor'
-    end
-  end
-
-  concern :geolocateable do 
-    get :near, on: :collection 
-  end
 
   namespace :api, defaults: { format: :json }, path: '/' do # constraints: { subdomain: 'api' }
     scope module: :v1, constraints: ApiVersion.new(version: 1, default: true) do 
 
+      root to: 'spots#index'
+
       with_options only: :index do 
         resources :features
         resources :categories
-        resources :neighborhoods, concerns: :geolocateable
       end
-
-      resources :events, only: [ :show, :update, :destroy ], concerns: :geolocateable
-
-      resources :spots, except: [ :new, :edit ], concerns: [ :user_roleable, :geolocateable ] do
       
-        with_options only: [ :create, :update, :destroy ] do
+      get 'users/search', to: 'users#search'
+      get 'users/emailexists', to: 'users#emailexists'
+
+      resources :events, only: [ :show, :update, :destroy ] do 
+          resources :images, only: [ :create ]
+      end
+    
+      get 'spots/spot_exists', to: 'spots#spot_exists' 
+      
+      resources :spots, except: [ :new, :edit ] do
+        
+        collection do
+          get :near
+          get :favorites 
+          get :search
+          get :user_index
+        end
+
+        with_options only: [ :index, :create, :update, :destroy ], shallow: true do
           resources :specials
           resources :hours
+          resources :menus
+          resources :images
+          resources :user_roles 
+          resources :events do
+            resources :images, only: [ :create ]
+          end
         end 
-      
-        resources :menus,    only: [ :index, :create, :update, :destroy ], shallow: true 
-        resources :events,   only: [ :index, :create ] 
-      
-      end 
+      end
+
+         
       
       resources :favorites, only: [ :create, :destroy ]
       
@@ -46,7 +55,10 @@ Rails.application.routes.draw do
         resources :checkins
         resources :reports 
       end
-       
+
     end
   end
+  
+  match "*path", to: "application#not_found", via: :all
+
 end

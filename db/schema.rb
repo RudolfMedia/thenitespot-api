@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150603033838) do
+ActiveRecord::Schema.define(version: 20160429031925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,14 +60,18 @@ ActiveRecord::Schema.define(version: 20150603033838) do
     t.string   "email"
     t.string   "ticket_url"
     t.string   "website_url"
-    t.string   "facebook_url"
-    t.string   "twitter_url"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.date     "start_date",      null: false
+    t.time     "start_time"
+    t.date     "end_date"
+    t.time     "end_time"
+    t.date     "expiration_date", null: false
   end
 
   add_index "events", ["slug"], name: "index_events_on_slug", using: :btree
   add_index "events", ["spot_id"], name: "index_events_on_spot_id", using: :btree
+  add_index "events", ["start_date"], name: "index_events_on_start_date", using: :btree
 
   create_table "favorites", force: :cascade do |t|
     t.integer  "user_id"
@@ -101,9 +105,9 @@ ActiveRecord::Schema.define(version: 20150603033838) do
     t.integer  "imageable_id"
     t.string   "imageable_type"
     t.string   "file"
-    t.boolean  "primary"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.boolean  "primary",        default: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   add_index "images", ["imageable_type", "imageable_id"], name: "index_images_on_imageable_type_and_imageable_id", using: :btree
@@ -131,42 +135,15 @@ ActiveRecord::Schema.define(version: 20150603033838) do
   add_index "menus", ["sort"], name: "index_menus_on_sort", using: :btree
   add_index "menus", ["spot_id"], name: "index_menus_on_spot_id", using: :btree
 
-  create_table "neighborhoods", force: :cascade do |t|
-    t.string   "name"
-    t.string   "label"
-    t.string   "state"
-    t.float    "longitude"
-    t.float    "latitude"
-    t.integer  "spots_count", default: 0
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-  end
-
-  create_table "occurrences", force: :cascade do |t|
-    t.integer  "event_id"
-    t.date     "start_date",      null: false
-    t.time     "start_time"
-    t.date     "end_date"
-    t.time     "end_time"
-    t.date     "expiration_date", null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-  end
-
-  add_index "occurrences", ["event_id"], name: "index_occurrences_on_event_id", using: :btree
-  add_index "occurrences", ["expiration_date"], name: "index_occurrences_on_expiration_date", using: :btree
-  add_index "occurrences", ["start_date"], name: "index_occurrences_on_start_date", using: :btree
-
   create_table "reports", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "reportable_id"
-    t.string   "reportable_type"
     t.integer  "issue"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "spot_id"
   end
 
-  add_index "reports", ["reportable_type", "reportable_id"], name: "index_reports_on_reportable_type_and_reportable_id", using: :btree
+  add_index "reports", ["spot_id"], name: "index_reports_on_spot_id", using: :btree
   add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
 
   create_table "specials", force: :cascade do |t|
@@ -208,7 +185,6 @@ ActiveRecord::Schema.define(version: 20150603033838) do
     t.string   "phone"
     t.string   "email"
     t.text     "about"
-    t.string   "price"
     t.string   "payment_opts",    default: [],              array: true
     t.string   "website_url"
     t.string   "reservation_url"
@@ -217,7 +193,9 @@ ActiveRecord::Schema.define(version: 20150603033838) do
     t.string   "twitter_url"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
-    t.integer  "neighborhood_id"
+    t.integer  "favorites_count", default: 0
+    t.integer  "price",           default: 0
+    t.integer  "menus_count",     default: 0
   end
 
   add_index "spots", ["attend"], name: "index_spots_on_attend", using: :btree
@@ -225,19 +203,17 @@ ActiveRecord::Schema.define(version: 20150603033838) do
   add_index "spots", ["eat"], name: "index_spots_on_eat", using: :btree
   add_index "spots", ["latitude"], name: "index_spots_on_latitude", using: :btree
   add_index "spots", ["longitude"], name: "index_spots_on_longitude", using: :btree
-  add_index "spots", ["neighborhood_id"], name: "index_spots_on_neighborhood_id", using: :btree
   add_index "spots", ["slug"], name: "index_spots_on_slug", unique: true, using: :btree
 
   create_table "user_roles", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "resource_id"
-    t.string   "resource_type"
     t.integer  "role"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "spot_id"
   end
 
-  add_index "user_roles", ["resource_type", "resource_id"], name: "index_user_roles_on_resource_type_and_resource_id", using: :btree
+  add_index "user_roles", ["spot_id"], name: "index_user_roles_on_spot_id", using: :btree
   add_index "user_roles", ["user_id"], name: "index_user_roles_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -261,8 +237,12 @@ ActiveRecord::Schema.define(version: 20150603033838) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "avatar"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
 
+  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
@@ -276,11 +256,9 @@ ActiveRecord::Schema.define(version: 20150603033838) do
   add_foreign_key "hours", "spots"
   add_foreign_key "menu_items", "menus"
   add_foreign_key "menus", "spots"
-  add_foreign_key "occurrences", "events"
   add_foreign_key "reports", "users"
   add_foreign_key "specials", "spots"
   add_foreign_key "spot_features", "features"
   add_foreign_key "spot_features", "spots"
-  add_foreign_key "spots", "neighborhoods"
   add_foreign_key "user_roles", "users"
 end

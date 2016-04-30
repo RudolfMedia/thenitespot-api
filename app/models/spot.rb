@@ -1,16 +1,32 @@
 class Spot < ActiveRecord::Base
   include Categorizable 
-  include UserRoleable
+  # include UserRoleable
   include Imageable
-  #extend FriendlyId
+  extend FriendlyId
 
-  #friendly_id :slug_candidates, use: :slugged
+  friendly_id :slug_candidates, use: :slugged
 
-  belongs_to :neighborhood, counter_cache: true
+
+  has_many :user_roles, dependent: :delete_all
+
+  with_options class_name: 'UserRole', dependent: :delete_all do 
+    has_many :admin_roles,  ->{ admins }
+    has_many :editor_roles, ->{ editors }
+  end
+
+  with_options source: :user do 
+    has_many :admin_users, through: :admin_roles
+    has_many :editor_users, through: :editor_roles
+  end
+
+  validates_presence_of :admin_roles
+
+
   has_many :spot_features, dependent: :destroy 
   has_many :features, through: :spot_features
 
   has_many :specials, dependent: :destroy
+  has_many :current_specials, ->{ current }, class_name: 'Special' 
   validates_length_of :specials, maximum: 42, message: 'A Nitespot may have up to 42 specials'
 
   has_many :hours, dependent: :destroy
@@ -20,6 +36,8 @@ class Spot < ActiveRecord::Base
   validates_length_of :menus, maximum: 6, message: 'A Nitespot may have up to 6 menus'
      
   has_many :events, dependent: :destroy
+  has_many :upcoming_events, ->{ upcoming }, class_name: 'Event'
+
   validates_length_of :events, maximum: 20, message: 'A Nitespot may have up to 20 events at a time' 
 
   has_many :favorites, dependent: :destroy 
@@ -27,22 +45,21 @@ class Spot < ActiveRecord::Base
 
   has_many :checkins, dependent: :destroy
   has_many :reports, as: :reportable, dependent: :destroy 
-  
   #default_scope ->{ includes(:hours,:specials,:categories,:features) }
 
-  PRICE_RANGES 	  = { '$' => 'low pricing', '$$' => 'moderate pricing', '$$$' => 'high pricing', '$$$$' => 'fine dining' }
+  #PRICE_RANGES 	  =  ['$','$$','$$$','$$$$'] #{ '$' => 'low pricing', '$$' => 'moderate pricing', '$$$' => 'high pricing', '$$$$' => 'fine dining' }
   PAYMENT_OPTIONS = ['visa', 'mastercard', 'amex', 'discover']
   
   geocoded_by :address 
-  before_validation :geocode, if: ->(s){ s.address.present? && s.address_changed? }
+  before_validation :geocode, if: ->(s){ s.address_changed? && !s.new_record? } # AND LAT LNG NOT PRESENT!...
 
-  validates_presence_of :name, :street, :city, :state 
+  validates_presence_of :name, :street, :city, :state #,:phone
   validates :name, length: { in: (3..30) }, unreserved_name: true 
   validate :eat_drink_or_attend?
-  validates_numericality_of :longitude, :latitude, message: 'Unable to find given address' 
+  validates_numericality_of :longitude, :latitude, message: 'Unable to locate address' 
 
   with_options allow_blank: true do 
-  	validates :price, inclusion: { in: PRICE_RANGES.keys }
+  	# validates :price, inclusion: { in: [ 0, 1, 2, 3, 4 ] }
     validates :about, length: { maximum: 500 }
     validates :email, email: true
 
@@ -55,18 +72,19 @@ class Spot < ActiveRecord::Base
   end 
   
   validate :valid_payment_options?, if: ->(s){ s.payment_opts.present? }
-  
-  #scope :associations, ->{ includes(:specials,:hours,:categories,:features) }
 
-  # def primary_image
-  #   images.find_by(is_primary: true)
-  # end
+  scope :assocs, ->{ includes(:categories, :features, :current_specials, :hours, :primary_image, :events) }
 
   scope :eat,   ->{ where eat: true }
   scope :drink, ->{ where drink: true }
   scope :attend,->{ where attend: true }
-  scope :neighborhoods, ->(ids){ where neighborhood_id: ids }
 
+  #Searchby filters...
+  scope :q,     ->(q){ where('spots.name iLIKE ?', "#{q}%") }
+  scope :ctg,   ->(ids){ where(categories: { id: ids })  }
+  scope :ftr,   ->(ids){ where(features: { id: ids })  }
+
+  
   def address
   	return unless street && city && state 
   	[ street, city, state ].join(', ').titleize
@@ -76,17 +94,21 @@ class Spot < ActiveRecord::Base
     self.street, self.city, self.state = value.split(',').map(&:strip)
   end
 
-  def price_range
-    Spot::PRICE_RANGES[price] if price 
+  def distance=(value)
+    value
   end
+
+  # def price_range
+  #   Spot::PRICE_RANGES[price] if price 
+  # end
 
   def address_changed?
   	street_changed? || city_changed? || state_changed?
   end
 
-  # def normalize_friendly_id(string)
-  #   super(string.gsub("'", ""))
-  # end
+  def normalize_friendly_id(string)
+    super(string.gsub("'", ""))
+  end
 
   def self.geolocate(position, radius)
     where(id: self.near(position,radius, select: "#{table_name}.id").map(&:id))
@@ -106,7 +128,8 @@ private
     end
   end
 
-  # def slug_candidates
-  # 	[ :name, [ :name, :city ], [ :name, :street, :city ] ]
-  # end
+
+  def slug_candidates
+  	[ :name, [ :name, :city ] ]
+  end
 end

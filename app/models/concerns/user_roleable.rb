@@ -2,7 +2,7 @@ module UserRoleable
   extend ActiveSupport::Concern
   
   included do 
-    has_many :user_roles, as: :resource, dependent: :destroy
+    has_many :user_roles, as: :resource, dependent: :delete_all
     with_options as: :resource, class_name: 'UserRole', dependent: :delete_all do 
       has_many :admin_roles,  ->{ admins }
       has_many :editor_roles, ->{ editors }

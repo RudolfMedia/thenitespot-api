@@ -1,28 +1,31 @@
 module API
   module V1
     class SpotsController < ApplicationController
-      before_action :authenticate_user!, except: [:show, :near]
+      before_action :authenticate_user!, except: [:show, :near, :search]
+      before_action :location_set?, only: [ :near ]
 
       def index
-      	spots = Spot.all
-      	spots = spots.send(params[:sort].to_sym) if valid_sort? 
-      	render json: spots, status: 200
+        spots = Spot.all.assocs
+        spots = spots.send(params[:sort].to_sym) if valid_sort?
+        render json: spots, status: 200
       end
 
       def near
-        spots = params[:ngh].present? ? Spot.neighborhoods(params[:ngh]) : Spot.near(ll_params, radius)
+        spots = Spot.near(location, radius).assocs
         spots = spots.send(params[:sort].to_sym) if valid_sort?
-      	render json: spots, status: 200
+        render json: spots, status: 200
+      end
+
+      def favorites
+        spots = current_user.favorite_spots.near(location, 30).assocs
+        render json: spots, status: 200
       end
 
       def show
-      	spot = Spot.find(params[:id])
+      	spot = Spot.assocs.friendly.find(params[:id])
+        spot.distance = spot.distance_from(location) if location.present?
       	render json: spot, status: 200
       end
-
-      # def new
-      # 	spot = Spot.new()
-      # end
 
       def create
       	spot = Spot.new(spot_params)
@@ -34,12 +37,6 @@ module API
       	end
       end
 
-      # def edit
-      # 	spot = Spot.find(params[:id])
-      # 	#authorize spot
-      # 	render json: spot, status: 200 
-      # end
-
       def update
       	spot = Spot.find(params[:id])
       	authorize spot
@@ -49,20 +46,42 @@ module API
       	else
           render json: spot.errors, status: 422
       	end
-
       end
 
       def destroy
       	spot = Spot.find(params[:id])
       	authorize spot
       	spot.destroy
-      	render json: { success: 'Spot removed' }, status: 200
+      	render json: { success: 'Spot removed' }, status: 204
+      end
+
+      def search
+        spots = params[:q].present? ? Spot.q(params[:q]) : []
+        render json: spots, status: 200
+      end
+
+      def user_index
+        spots = current_user.spots 
+        render json: spots, status: 200 
+      end
+
+      def spot_exists
+        resp = params[:name].present? ? Spot.exists?(["lower(name) = ?", params[:name].downcase]) : false
+        render json: resp, status: 200 
       end
     
     private
-      
+
+      def location_set?
+        location.present? 
+      end
+
       def spot_params
-        params.require(:spot).permit(*permitted_spot_params)
+        params.permit(*permitted_spot_params)
+      end
+
+      def filter_params
+        params.slice(:ftr, :ctg, :q)
       end
 
       def permitted_spot_params
@@ -70,9 +89,9 @@ module API
           :name,
           :eat, :drink, :attend,
           :street, :city, :state,
-          :neighborhood_id, 
+          :longitude, :latitude,
 		      :phone, :email, :about, :price, 
-		      :website_url, :reservation_url, :menu_url, :facebook_url, :twitter_url, 
+		      :website_url, :reservation_url, :menu_url,
 		      :payment_opts =>[], 
 		      :feature_ids => [], 
 		      :category_ids => []
@@ -80,7 +99,7 @@ module API
       end 
 
       def image_params
-        { :primary_image_attributes => [ :id, :file, :_destroy ], :images_attributes => [ :id, :file, :_destroy ] }
+        { :primary_image_attributes => [ :id, :file, :file_data_uri, :remove_image, :_destroy ] }
 	    end 
 
     end

@@ -1,0 +1,2 @@
+class EnsureAdminError < StandardError
+end

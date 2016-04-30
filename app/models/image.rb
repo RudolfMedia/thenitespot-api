@@ -3,11 +3,23 @@ class Image < ActiveRecord::Base
   mount_uploader :file, ImageUploader
   belongs_to :imageable, polymorphic: true
   
-  validates_presence_of :imageable_id, :imageable_type, :file 
+  validates_presence_of :imageable_id, :imageable_type
 
-  before_save :update_imageable_primary, if: ->(img){ img.primary? && img.primary_changed? }
+  after_save :update_imageable_primary, if: ->(img){ img.primary? && img.primary_changed? }
 
   scope :primary, ->{ where primary: true }
+
+  def self.policy_class
+    ImagePolicy
+  end
+  # carriewave-data-uri for naming...
+  def file_data_filename
+    random_filename
+  end
+
+  def random_filename
+    @string ||= "#{SecureRandom.urlsafe_base64}.jpg"
+  end
 
 private 
 

@@ -1,7 +1,7 @@
 class EventPolicy < ApplicationPolicy
 
   def create?
-    user.can_update? record.spot 
+    user.can_update? record.spot  
   end
 
   def update?

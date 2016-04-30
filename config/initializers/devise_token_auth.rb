@@ -3,4 +3,5 @@ DeviseTokenAuth.setup do |config|
   #config.token_lifespan = 2.weeks
   #config.batch_request_buffer_throttle = 5.seconds
   #config.omniauth_prefix = "/omniauth"
+  #config.default_password_reset_url = 'http://localhost:8080/account/resetpassword'
 end

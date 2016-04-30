@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+ 	<table>
+ 		<tr>
+ 		  <td>User</td>
+ 		  <td><%= @user.present? ? "#{@user.email}" : "Anomyous" %></td>
+ 		</tr>
+
+ 		<tr>
+ 		  <td>Spot</td>
+ 		  <td><%= @spot.name %></td>
+ 		</tr>
+
+
+ 		<tr>
+ 		  <td>Spot id</td>
+ 		  <td><%= @spot.id %></td>
+ 		</tr>
+
+
+ 		<tr>
+ 		  <td>Reason</td>
+ 		  <td><%= @report.report_type %></td>
+ 		</tr>
+
+ 		<tr>
+ 		  <td>@</td>
+ 		  <td><%= @report.created_at %></td>
+ 		</tr>
+ 	</table>
+  </body>
+</html>
