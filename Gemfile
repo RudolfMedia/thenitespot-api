@@ -33,3 +33,5 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'rack-timeout'
 
 gem 'whenever', :require => false
+
+gem 'newrelic_rpm'
