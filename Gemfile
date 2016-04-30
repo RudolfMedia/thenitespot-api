@@ -30,5 +30,6 @@ gem 'cloudinary'
 
 
 gem 'rack-cors', :require => 'rack/cors'
+gem 'rack-timeout'
 
 gem 'whenever', :require => false
