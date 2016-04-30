@@ -49,6 +49,22 @@ attend_categories = [
 
 ]
 
+features = [
+
+	'Dance Floor',
+	'Darts',
+	'Handicap access',
+	'Late Nite Menu',
+	'Live Music',
+	'Outdoor Seating',
+	'Pool Table',
+	'Six packs to go',
+	'Smoking Section',
+	'Valet Parking',
+	'Wifi'
+
+]
+
 Category.destroy_all 
 food_categories.each do |name|
 	Category.create!(name: name, sort: 'eat')
@@ -62,7 +78,7 @@ attend_categories.each do |name|
 	Category.create(name: name, sort: 'attend')
 end
 
-Feature.destroy_all
+Feature.destroy_all 
 features.each do |name|
 	Feature.create(name: name)
 end
