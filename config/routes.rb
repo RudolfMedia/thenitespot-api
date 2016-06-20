@@ -36,7 +36,10 @@ Rails.application.routes.draw do
         end
 
         with_options only: [ :index, :create, :update, :destroy ], shallow: true do
-          resources :specials
+          resources :specials do           
+            get :weekly, on: :collection
+            get :featured, on: :collection 
+          end
           resources :hours
           resources :menus
           resources :images

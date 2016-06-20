@@ -240,9 +240,10 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :facebook, "360780774072149", "78577e5155d8390536047c12d3cbad91", 
-                  scope: 'user_location,user_birthday', 
+                  scope: 'public_profile, user_location, user_birthday', 
                   image_size: { width: 640, height: 640 }, 
-                  secure_image_url: true 
+                  secure_image_url: true ,
+                  info_fields: 'first_name,last_name,gender'
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

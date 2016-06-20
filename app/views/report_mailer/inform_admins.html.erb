@@ -1,0 +1,7 @@
+<p style="font-size: 1.1em;"> Hello <%= @admin.first_name %> </p>
+<p style="color: #cccccc"> This Email has been sent to inform you that the following nitespot has been reported as having outdated or incorrect information: </p>
+<p>
+<a href="http://www.thenitespot.com/spots/<%= @spot.slug %>"
+   style="color: white; display: block;"><%= @spot.name %></a>
+<%= @spot.address %>
+</p>

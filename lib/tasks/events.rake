@@ -1,6 +1,6 @@
 task :destroy_expired_events => :environment do
 
-    Event.where("expiration_date < ?", Date.today).each do |event|
+    Event.expired.each do |event|
     	event.destroy
     end
 

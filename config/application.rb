@@ -20,6 +20,11 @@ module ThenitespotApi
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths += %w( #{config.root}/app/uploaders )
     config.autoload_paths += %w( #{config.root}/app/exceptions )
+    
+    env_file = Rails.root.join("config", 'local_env.yml').to_s
+    YAML.load_file(env_file)[Rails.env].each do |key, value|
+      ENV[key.to_s] = value
+    end if File.exists?(env_file)
 
     config.assets.initialize_on_precompile = false
     
@@ -29,7 +34,8 @@ module ThenitespotApi
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
+    config.time_zone = 'Eastern Time (US & Canada)'
+    # config.active_record.default_timezone = 'Eastern Time (US & Canada)'
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
@@ -44,13 +50,10 @@ module ThenitespotApi
           :max_age => 0,
           :expose  => ['access-token', 'expiry', 'uid', 'client']
 
-        # resource '/cors',
-        #   :headers => :any,
-        #   :methods => [:post],
-        #   :credentials => true,
-        #   :max_age => 0
       end
     end
+   config.middleware.use  Rack::Timeout
+   config.middleware.insert_before(Rack::Timeout, 'TimeoutRecovery')
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true

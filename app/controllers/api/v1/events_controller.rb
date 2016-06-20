@@ -57,6 +57,7 @@ module API
           :age, :entry, :entry_fee,
 		      :phone, :email, :about,
 		      :website_url, 
+          :ticket_url,
 		      :category_ids => [],
           :primary_image_attributes => [ :id, :file_data_uri, :_destroy ]
         ] 

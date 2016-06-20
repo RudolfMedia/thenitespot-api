@@ -32,7 +32,8 @@ bar_categories = [
 	'Nightclub',
 	'Pub',
 	'Sports Bar',
-	'Wine Bar'
+	'Wine Bar',
+	'B.Y.O.B'
 
 ]
 

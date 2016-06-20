@@ -7,6 +7,13 @@ module API
         
         if report.save
           ReportMailer.send_report(current_user, report).deliver_later
+
+          if report.issue == 1 
+            report.spot.admin_users.each do |admin|
+              ReportMailer.inform_admins(admin, report).deliver_later
+            end
+          end
+
           render json: report, status: 201
         else
           render json: report.errors, status: 422 

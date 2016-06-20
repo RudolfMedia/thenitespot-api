@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
- 	<table>
+
+<table>
  		<tr>
  		  <td>User</td>
  		  <td><%= @user.present? ? "#{@user.email}" : "Anomyous" %></td>
@@ -31,6 +26,4 @@
  		  <td>@</td>
  		  <td><%= @report.created_at %></td>
  		</tr>
- 	</table>
-  </body>
-</html>
+</table>

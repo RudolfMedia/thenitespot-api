@@ -34,6 +34,8 @@ class Event < ActiveRecord::Base
   validate :dates_are_not_in_the_past, 
            :dates_are_within_one_year, 
            :dates_are_in_order, unless: ->(e){ e.start_date.blank? }
+
+  scope :expired, ->{ where("expiration_date < ?", Date.current) }
   
   private
 
@@ -42,7 +44,7 @@ class Event < ActiveRecord::Base
     end
   
     def dates_are_not_in_the_past
-     if start_date < Date.today || (end_date && end_date < Date.today)
+     if start_date < Date.current || (end_date && end_date < Date.current)
       errors.add(:base, 'Provided dates cannot be in the past.')
      end 
     end

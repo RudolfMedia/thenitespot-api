@@ -6,7 +6,7 @@ module Overrides
   protected
 
     def configure_permitted_parameters
-      [ :name, :location, :gender, :dob, :avatar_data_uri, :remove_avatar ].each do |val|
+      [ :first_name, :last_name, :location, :gender, :dob, :avatar_data_uri, :remove_avatar, :business, :phone ].each do |val|
         devise_parameter_sanitizer.for(:sign_up)        << val   
         devise_parameter_sanitizer.for(:account_update) << val 
       end
@@ -15,8 +15,7 @@ module Overrides
     
     
     def account_update_params
-      params.permit(:name, :location, :gender, :dob, :avatar_data_uri, :remove_avatar, :password, :password_confirmation, :current_password)
-      # Rails.logger.info 
+      params.permit(:first_name, :last_name, :location, :gender, :dob, :business, :phone, :avatar_data_uri, :remove_avatar, :password, :password_confirmation, :current_password)
     end
 
     # def render_update_success

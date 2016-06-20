@@ -12,6 +12,10 @@ class ApplicationController < ActionController::API
     render json: { errors: "Oops!, can't find what you're looking for..." } , status: 404 and return
   end 
 
+  def handle_timeout
+    render json: { error: 'Request Timeout' }, status: 503 and return
+  end
+  
 protected
 
   def valid_sort?

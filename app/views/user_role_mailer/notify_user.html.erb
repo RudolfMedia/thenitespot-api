@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
-    <p>Hello, <%= @user.name %>, <br/>
-      <%= @admin_user.name %> has added you to the user group for <%= @spot.name %>, (<%= @spot.address %>)<br/>
-      Thank you.
-  </body>
-</html>
+<p style="font-size: 1.1em;"> Hello <%= @user.first_name %> </p>
+<p style="color: #cccccc"> <%= @admin_user.first_name %> <%= @admin_user.last_name %> has added you to the business team for: </p>
+
+<p>
+<a href="http://www.thenitespot.com/spots/<%= @spot.slug %>"
+   style="color: white; display: block;"><%= @spot.name %></a>
+<%= @spot.address %>
+</p>
+
+<p>You can now sign in to access their business tools</p>

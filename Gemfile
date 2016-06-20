@@ -15,7 +15,7 @@ gem 'friendly_id', '~> 5.1.0'
 gem 'active_model_serializers', '~> 0.10.0.rc3'
 
 
-gem 'geocoder'
+gem 'geocoder', '~> 1.3.4'
 
 
 gem 'devise', '~> 3.5', '>= 3.5.3'

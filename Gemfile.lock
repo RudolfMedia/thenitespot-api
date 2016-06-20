@@ -71,7 +71,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
-    geocoder (1.2.8)
+    geocoder (1.3.4)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     hashie (3.4.1)
@@ -183,7 +183,7 @@ DEPENDENCIES
   devise (~> 3.5, >= 3.5.3)
   devise_token_auth (~> 0.1.36)
   friendly_id (~> 5.1.0)
-  geocoder
+  geocoder (~> 1.3.4)
   newrelic_rpm
   omniauth
   omniauth-facebook (~> 3.0.0)

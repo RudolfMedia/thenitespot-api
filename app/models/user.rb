@@ -15,10 +15,14 @@ class User < ActiveRecord::Base
   has_many :checkins, dependent: :destroy
   has_many :reports, dependent: :destroy   
 
-  validates_presence_of :name, :location
+  validates_presence_of :first_name, :last_name
+  validates_presence_of :phone, if: ->(u){ u.business? }
+
   validates :gender, inclusion: { in: %w( male female ) }, allow_blank: true
 
   before_save :skip_confirmation!, if: :new_record? 
+
+  scope :business, ->{ where(business: true) }
 
   def avatar_data_filename
     random_filename

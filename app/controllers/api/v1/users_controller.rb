@@ -18,7 +18,7 @@ module API
       def search
         if params[:q].present?
           q = "%#{params[:q]}%"
-          users = User.where('name ILIKE ?', q).limit(10)
+          users = User.business.where('first_name ILIKE ? OR last_name ILIKE ?', q, q).limit(10)
           render json: users, status: 200
         end
       end

@@ -1,6 +1,4 @@
 class UserRoleMailer < ApplicationMailer
-
-  default from: 'notifications@example.com'
  
   def notify_user(current_user,user_role)
   	@admin_user = current_user

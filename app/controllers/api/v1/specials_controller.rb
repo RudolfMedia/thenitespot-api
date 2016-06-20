@@ -1,16 +1,26 @@
 module API
   module V1
     class SpecialsController < ApplicationController
-      before_action :authenticate_user!, except: [ :index ]
-      before_action :set_spot, only: [ :index, :create ]
+      before_action :authenticate_user!, except: [ :index, :weekly, :featured ]
+      before_action :set_spot, only: [ :index, :create, :weekly, :featured ]
 
       def index
         specials = @spot.specials
         render json: specials, status: 200
       end
 
+      def weekly 
+        specials = @spot.weekly_specials
+        render json: specials, status: 200
+      end
+
+      def featured
+        specials = @spot.featured_specials
+        render json: specials, status: 200
+      end
+
       def create
-        special = @spot.specials.new(special_params)
+        special = params[:start_date].present? ? @spot.featured_specials.new(special_params) : @spot.weekly_specials.new(special_params)
         authorize special
         if special.save
           render json: special, status: 201
@@ -43,7 +53,7 @@ module API
       end
 
       def special_params
-        params.permit(:name, :sort, :description, :start_time, :end_time, :days => [])
+        params.permit(:name, :sort, :description, :start_time, :end_time, :start_date, :end_date, :days => [])
       end
 
     end

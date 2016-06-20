@@ -26,8 +26,12 @@ class Spot < ActiveRecord::Base
   has_many :features, through: :spot_features
 
   has_many :specials, dependent: :destroy
-  has_many :current_specials, ->{ current }, class_name: 'Special' 
   validates_length_of :specials, maximum: 42, message: 'A Nitespot may have up to 42 specials'
+
+  has_many :weekly_specials
+  has_many :current_specials, ->{ current }, class_name: 'WeeklySpecial'
+
+  has_many :featured_specials
 
   has_many :hours, dependent: :destroy
   validates_length_of :hours, maximum: 14, message: 'A Nitespot may have up to 14 sets of hours'
@@ -44,7 +48,7 @@ class Spot < ActiveRecord::Base
   has_many :favorite_users, through: :favorites, source: :user
 
   has_many :checkins, dependent: :destroy
-  has_many :reports, as: :reportable, dependent: :destroy 
+  has_many :reports, dependent: :destroy 
   #default_scope ->{ includes(:hours,:specials,:categories,:features) }
 
   #PRICE_RANGES 	  =  ['$','$$','$$$','$$$$'] #{ '$' => 'low pricing', '$$' => 'moderate pricing', '$$$' => 'high pricing', '$$$$' => 'fine dining' }
@@ -66,14 +70,12 @@ class Spot < ActiveRecord::Base
 	  with_options url: true do 
 	    validates :website_url
 	    validates :reservation_url
-	    validates :facebook_url
-	    validates :twitter_url
 	  end
   end 
   
   validate :valid_payment_options?, if: ->(s){ s.payment_opts.present? }
 
-  scope :assocs, ->{ includes(:categories, :features, :current_specials, :hours, :primary_image, :events) }
+  scope :assocs, ->{ includes(:categories, :features, :current_specials, :featured_specials, :hours, :primary_image, :events) }
 
   scope :eat,   ->{ where eat: true }
   scope :drink, ->{ where drink: true }

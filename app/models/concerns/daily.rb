@@ -10,7 +10,8 @@ module Daily
   module ClassMethods
     
     def today
-      Date.today.wday 
+      dow = Date.today.wday
+      dow == 0 ? 7 : dow
     end
 
   end

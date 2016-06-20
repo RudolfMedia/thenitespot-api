@@ -1,12 +1,16 @@
 class ReportMailer < ApplicationMailer
 
-	default from: 'notifications@example.com'
- 
 	def send_report(current_user,report)
 	  @user = current_user
 	  @report = report
 	  @spot = report.spot 
 	  mail(to:'rowlandrudolf@comcast.net', subject: '** Report **')
+	end
+
+	def inform_admins(admin,report)
+	  @admin = admin
+	  @spot = report.spot 
+	  mail(to: admin.email, subject: "#{@spot.name} has been reported as outdated or incorrect")
 	end
 
 end

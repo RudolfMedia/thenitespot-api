@@ -16,7 +16,14 @@ class SpotSerializer < ActiveModel::Serializer
   has_one :primary_image 
   has_many :hours 
   has_many :current_specials
+  has_many :featured_specials
   has_many :events
+
+  def events
+    object.events.map do |e|
+      ActiveModel::Serializer::Adapter::FlattenJson.new(EventSerializer.new(e)).as_json
+    end
+  end
   
 end
 

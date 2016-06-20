@@ -1,5 +1,7 @@
-Hello, <%= @user.name %>
-***********************
-<%= @admin_user.name %> has added you to the <%= @spot.name %> user group.
+Hello <%= @user.first_name %>!
 
-Thank you.
+<%= @admin_user.first_name %>  <%= @admin_user.last_name %> has added you to the business team for: 
+<%= @spot.name %>
+<%= @spot.address %>
+
+You can now sign in to access their business tools.

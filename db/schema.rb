@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429031925) do
+ActiveRecord::Schema.define(version: 20160615030919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,11 +62,11 @@ ActiveRecord::Schema.define(version: 20160429031925) do
     t.string   "website_url"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.date     "start_date",      null: false
+    t.datetime "start_date",      null: false
     t.time     "start_time"
-    t.date     "end_date"
+    t.datetime "end_date"
     t.time     "end_time"
-    t.date     "expiration_date", null: false
+    t.datetime "expiration_date", null: false
   end
 
   add_index "events", ["slug"], name: "index_events_on_slug", using: :btree
@@ -151,11 +151,15 @@ ActiveRecord::Schema.define(version: 20160429031925) do
     t.string   "name"
     t.integer  "sort"
     t.string   "description"
-    t.string   "days",        default: [],              array: true
+    t.string   "days",            default: [],              array: true
     t.time     "start_time"
     t.time     "end_time"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.string   "type"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "expiration_date"
   end
 
   add_index "specials", ["sort"], name: "index_specials_on_sort", using: :btree
@@ -189,8 +193,6 @@ ActiveRecord::Schema.define(version: 20160429031925) do
     t.string   "website_url"
     t.string   "reservation_url"
     t.string   "menu_url"
-    t.string   "facebook_url"
-    t.string   "twitter_url"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.integer  "favorites_count", default: 0
@@ -228,7 +230,6 @@ ActiveRecord::Schema.define(version: 20160429031925) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.string   "name"
     t.string   "email"
     t.string   "gender"
     t.date     "dob"
@@ -240,6 +241,10 @@ ActiveRecord::Schema.define(version: 20160429031925) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.string   "phone"
+    t.boolean  "business"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
