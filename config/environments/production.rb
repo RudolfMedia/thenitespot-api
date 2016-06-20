@@ -13,16 +13,16 @@ Rails.application.configure do
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
+  config.action_mailer.default_url_options = { host: "localhost:3000" }
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: "localhost:8000" }
   config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com',
-    port:                 587,
-    domain:               'example.com',
-    user_name:             ENV['GMAIL_USERNAME'],
-    password:              ENV['GMAIL_PASSWORD'],
-    authentication:       'plain',
-    enable_starttls_auto: true  
+    address:              'smtpout.secureserver.net',
+    port:                 80,
+    domain:               'thenitespot.com',
+    user_name:             ENV['NITESPOT_INFO_USERNAME'],
+    password:              ENV['NITESPOT_INFO_PASSWORD'],
+    authentication:       :plain,
+    openssl_verify_mode:  :none,
   }
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
