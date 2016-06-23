@@ -35,7 +35,7 @@ class Event < ActiveRecord::Base
            :dates_are_within_one_year, 
            :dates_are_in_order, unless: ->(e){ e.start_date.blank? }
 
-  scope :expired, ->{ where("expiration_date < ?", Date.current) }
+  scope :expired, ->{ where("expiration_date <= ?", Date.current) }
   
   private
 
