@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160615030919) do
+ActiveRecord::Schema.define(version: 20160623030830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,10 +63,10 @@ ActiveRecord::Schema.define(version: 20160615030919) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.datetime "start_date",      null: false
-    t.time     "start_time"
     t.datetime "end_date"
-    t.time     "end_time"
     t.datetime "expiration_date", null: false
+    t.datetime "start_time"
+    t.datetime "end_time"
   end
 
   add_index "events", ["slug"], name: "index_events_on_slug", using: :btree
@@ -91,12 +91,12 @@ ActiveRecord::Schema.define(version: 20160615030919) do
 
   create_table "hours", force: :cascade do |t|
     t.integer  "spot_id"
-    t.time     "open",                    null: false
-    t.time     "close",                   null: false
     t.string   "days",       default: [],              array: true
     t.string   "note"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.datetime "open"
+    t.datetime "close"
   end
 
   add_index "hours", ["spot_id"], name: "index_hours_on_spot_id", using: :btree
@@ -152,14 +152,14 @@ ActiveRecord::Schema.define(version: 20160615030919) do
     t.integer  "sort"
     t.string   "description"
     t.string   "days",            default: [],              array: true
-    t.time     "start_time"
-    t.time     "end_time"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.string   "type"
     t.datetime "start_date"
     t.datetime "end_date"
     t.datetime "expiration_date"
+    t.datetime "start_time"
+    t.datetime "end_time"
   end
 
   add_index "specials", ["sort"], name: "index_specials_on_sort", using: :btree
