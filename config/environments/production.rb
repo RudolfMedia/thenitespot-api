@@ -13,17 +13,18 @@ Rails.application.configure do
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
-  config.action_mailer.default_url_options = { host: "localhost:3000" }
+
+  config.action_mailer.default_url_options = { host: "thenitespot.com" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtpout.secureserver.net',
-    port:                 80,
-    domain:               'thenitespot.com',
-    user_name:             ENV['NITESPOT_INFO_USERNAME'],
-    password:              ENV['NITESPOT_INFO_PASSWORD'],
-    authentication:       :plain,
-    openssl_verify_mode:  :none,
+    address:              'email-smtp.us-east-1.amazonaws.com',
+    port:                 465,
+    domain:               'still-badlands-32504.herokuapp.com',
+    user_name:             ENV['SES_SMTP_USERNAME'],
+    password:              ENV['SES_SMTP_PASSWORD'],
+    authentication:       :login
   }
+
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
