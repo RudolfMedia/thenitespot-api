@@ -1,3 +1,3 @@
-#if %w( development ).include?(Rails.env)
+if %w( development ).include?(Rails.env)
   ActionMailer::Base.register_interceptor(RedirectMailInterceptor)
-#end
+end
