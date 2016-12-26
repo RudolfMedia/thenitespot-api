@@ -1,9 +1,9 @@
 <p style="font-size: 1.1em;"> Hello <%= @user.first_name %> </p>
-<p style="color: #cccccc"> <%= @admin_user.first_name %> <%= @admin_user.last_name %> has added you to the business team for: </p>
+<p> <%= @admin_user.first_name %> <%= @admin_user.last_name %> has added you to the business team for: </p>
 
 <p>
-<a href="http://www.thenitespot.com/spots/<%= @spot.slug %>"
-   style="color: white; display: block;"><%= @spot.name %></a>
+<a href="https://www.thenitespot.com/spots/<%= @spot.slug %>"
+   style="color: black; display: block;"><%= @spot.name %></a>
 <%= @spot.address %>
 </p>
 

@@ -1,10 +1,10 @@
 class ReportMailer < ApplicationMailer
 
-	def send_report(current_user,report)
+	def send_report(current_user, report)
 	  @user = current_user
 	  @report = report
 	  @spot = report.spot 
-	  mail(to:'info@thenitespot.com', subject: '** Report **')
+	  mail(to:'report@thenitespot.com', subject: '** Report **')
 	end
 
 	def inform_admins(admin,report)
